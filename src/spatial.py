@@ -2,7 +2,20 @@ import math
 import csv #for csv reading
 from shapely.geometry import Point as ShapelyPoint
 
-class Point:
+class SpatialObject:
+    ''' Base abstraction for domain objects that have geometry'''
+    def __init__(self, geometry):
+        self.geometry = geometry
+
+    def bbox(self):
+        ''' Return the bounding box of the geometry as a tuple (minx, miny, maxx, maxy)'''
+        return self.geometry.bounds
+
+    def intersects(self, other):
+        ''' Return True if this object's geometry intersects with another SpatialObject's geometry'''
+        return self.geometry.intersects(other.geometry)
+
+class Point(SpatialObject):
     def __init__(self, id, lon, lat, name=None, tag=None):
         # Validate the longitude and latitude values
         # Note that validation must happen before assigning the values to the instance variables
@@ -10,9 +23,10 @@ class Point:
             raise ValueError("Longitude must be between -180 and 180 degrees.")
         if not (90.0 >= lat >= -90.0):
             raise ValueError("Latitude must be between -90 and 90 degrees.")
-        
+
+        geometry = ShapelyPoint(lon, lat)  # Create a Shapely Point object for the geometry
+        super().__init__(geometry)  # Initialize the base class with the geometry
         self.id = id
-        self.geometry = ShapelyPoint(lon, lat) #turns the lon and lat into a shapely point object
         self.name = name
         self.tag = tag
 

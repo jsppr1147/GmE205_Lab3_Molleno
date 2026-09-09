@@ -24,3 +24,10 @@ Part C: Structuring data boundaries: Dictionary -> Object -> Dictionary
 - The from_dict() method passes to the class Point method which allows it to validate the point in the __init__. Thus checks it for the "single truth validation" of this class.  
 - The as_dict() method returns the JSON-ready values of the point. It doesnt return a live shapely geometry object.  
 - A test for invalid and valid data (lon=999) was created for checking whether it works or not.  
+
+Part D: Creating a shared spatial abstraction: SpatialObject  
+- Created a class called "SpatialObject" for storing geometries and implementing simple methods bbox() and intersect() 
+- Refactored the Point class to inherit the "SpatialObject" behavior
+- Point uses the super().__init__(geometry) to call the initialization of the SpatialObject on the geometry (lat,lon) attribute.  
+- demo.py now have lines to checking whether bbox() work without duplicating it on Point class.  
+

@@ -15,15 +15,19 @@ coordinate_distance = p.geometry.distance(q.geometry)
 #for valid record..
 valid_record = {"id": "A", "lon": 121.0, "lat": 14.6, "name": "Gate", "tag": "POI"}
 p = Point.from_dict(valid_record)
-print(p.as_dict())
+#print(p.as_dict())
 
 # testing for invalid record 
-invalid_record = {"id": "B", "lon": 999, "lat": 14.6}
+'''invalid_record = {"id": "B", "lon": 999, "lat": 14.6}
 
 try:
     bad = Point.from_dict(invalid_record)
 except ValueError as exc:
-    print(f"Invalid record correctly rejected: {exc}")
+    print(f"Invalid record correctly rejected: {exc}")'''
+
+#verify the inherited behavior from SpatialObject
+j = Point("2", 121.1, 14.1)
+print (j.bbox())
 
 # --- PointSet checks ---
 CSV_PATH = "data/points.csv"  # relative path
