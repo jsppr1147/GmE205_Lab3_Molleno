@@ -1,6 +1,6 @@
 import math
 import csv #for csv reading
-
+from shapely.geometry import Point as ShapelyPoint
 
 class Point:
     def __init__(self, id, lon, lat, name=None, tag=None):
@@ -12,10 +12,17 @@ class Point:
             raise ValueError("Latitude must be between -90 and 90 degrees.")
         
         self.id = id
-        self.lon = lon
-        self.lat = lat
+        self.geometry = ShapelyPoint(lon, lat) #turns the lon and lat into a shapely point object
         self.name = name
         self.tag = tag
+
+    @property
+    def lon(self):
+        return self.geometry.x
+
+    @property
+    def lat(self):
+        return self.geometry.y
 
     def to_tuple(self) -> tuple[float, float]:
         """
