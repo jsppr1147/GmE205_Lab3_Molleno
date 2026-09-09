@@ -1,24 +1,21 @@
-from spatial import Point
-from spatial import Pointset
+from spatial import Point, PointSet
 
-#p = Point("0", 121.0, 14.0)
-#print(p.id, p.lon, p.lat)
+# --- Point checks (Part B) ---
+p = Point("0", 121.0, 14.0)
+print(p.id, p.lon, p.lat)
+print(p.to_tuple())
 
-#q = Point("1", -75.0, 140.0)
-#print(q.id, q.lon, q.lat)
+q = Point("1", 121.05, 14.05)
+print(f"Distance between p and q: {p.distance_to(q):.2f} meters")
 
-#print(p.coordinates())
+# --- Pointset checks ---
+CSV_PATH = "data/points.csv"  # relative path
 
-#testing pointset
-csv_path = "C:\\Users\\Jasper\\Documents\\1st Sem 26_27\\Programming Class\\GmE 205 Laboratory 2 - Simple Spatial Object in Python\\GmE205_Lab2_Molleno\\data\\points.csv"
-ps = Pointset.from_csv(csv_path)
-#print (ps.count())
-#bounding box check
-#a, b, c, d = ps.bbox()
-#print(f"Bounding box: ({a}, {b}, {c}, {d})")
-#filter by tag check
-#poi_set = ps.filter_by_tag("poi")
-#print(poi_set.count())
+ps = PointSet.from_csv(CSV_PATH)
+print(f"Loaded {ps.count()} points.")
 
-distance = ps.points[0].distance_to(ps.points[1])
-print(f"Distance between point 0 and point 1: {distance} meters")
+bbox = ps.bbox()
+print(f"Bounding box: {bbox}")
+
+poi_set = ps.filter_by_tag("poi")
+print(f"POI count: {poi_set.count()}")

@@ -17,11 +17,11 @@ class Point:
         self.name = name
         self.tag = tag
 
-    def coordinates(self)-> tuple[float, float]:
+    def to_tuple(self) -> tuple[float, float]:
         """
-        Return the coordinates of the point.
+        Return the coordinate as a (lon, lat) tuple.
         """
-        return self.lon, self.lat
+        return (self.lon, self.lat)
 
     @staticmethod #a decorator to indicate that this method does not depend on the instance of the class
     def haversine_m(lon1:float, lat1:float, lon2:float, lat2:float)-> float:
@@ -37,7 +37,7 @@ class Point:
         dlon = lon2 - lon1
         dlat = lat2 - lat1
         a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
-        c = 2 * math.asin(math.sqrt(a))
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
         
         # Radius of earth in meters
         r = 6371000.0
@@ -60,7 +60,7 @@ class Point:
     def is_poi(self):
         return (self.tag or "").lower() == "poi"
 
-class Pointset:
+class PointSet:
     def __init__(self, points=None):
         #Store the points in a list. If no points are provided, initialize an empty list.
         self.points = list(points) if points is not None else []
@@ -105,4 +105,4 @@ class Pointset:
         #Returns a new Pointset containing only the points with the specified tag.
         
         filtered_points = [point for point in self.points if (point.tag or "").lower() == tag.lower()]
-        return Pointset(filtered_points)
+        return PointSet(filtered_points)
