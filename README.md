@@ -17,4 +17,10 @@ Part B: Refactoring Point geometry to become a shapely object
 - p.lon and p.lat is still working through properties.  
 - to.tuple() works the same but with different input geometry values.  
 - distance_to works fine but it is noted that it is different from coordinate_distance in geometry.  
-- demo.py runs works properly.
+- demo.py runs works properly. 
+
+Part C: Structuring data boundaries: Dictionary -> Object -> Dictionary  
+- A classmethod was created to construct Point from a dictionary data.  
+- The from_dict() method passes to the class Point method which allows it to validate the point in the __init__. Thus checks it for the "single truth validation" of this class.  
+- The as_dict() method returns the JSON-ready values of the point. It doesnt return a live shapely geometry object.  
+- A test for invalid and valid data (lon=999) was created for checking whether it works or not.  

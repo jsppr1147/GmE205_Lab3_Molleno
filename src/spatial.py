@@ -30,6 +30,39 @@ class Point:
         """
         return (self.lon, self.lat)
 
+    @classmethod
+    def from_dict(cls, d:dict):
+        """
+        Create a Point object from a dictionary. 
+        The dictionary must contain 'id', 'lon', and 'lat' keys. Other keys are optional.
+        Relies on the __init__ method to validate the coordinates.
+        """
+        return cls(
+            id=d["id"],
+            lon=d["lon"],
+            lat=d["lat"],
+            name=d.get("name"),
+            tag=d.get("tag")
+        )       
+
+    def as_dict(self) -> dict:
+        """
+        Return the Point as a dictionary. 
+        Describe point using the primitives, this is useful for serialization (e.g., to JSON).
+
+        Note: self.geometry.bounds returns a tuple of (minx, miny, maxx, maxy), which is the bounding box of the point. 
+        self.geometry.bounds is kinda similar to the bbox of a PointSet, but for a single point, the min and max coordinates are the same.
+        Note: self.geometry.bounds is a tuple, so we use list(..) to convert it to a list, which is more JSON-friendly.
+        """
+        return {
+            "id": self.id,
+            "name": self.name,
+            "tag": self.tag,
+            "geometry": [self.lon, self.lat],
+            "bbox": list(self.geometry.bounds)
+        }
+
+    
     @staticmethod #a decorator to indicate that this method does not depend on the instance of the class
     def haversine_m(lon1:float, lat1:float, lon2:float, lat2:float)-> float:
         """
