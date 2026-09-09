@@ -39,3 +39,13 @@ Part E: Creating another Spatial Type (Class Parcel)
 - An arbitrary polygon is added to check if Parcel class is working fine.  
 - Additional points were also added to check whether in the method implementation is inherited properly from the SpatialObject. This is a good practice so the responsibility is distributed and placed properly to also avoid duplication of implementation is different classes.  
 
+Part F: Creating a specific runner script, structured outputs, and simple visualization  
+- a runner for this lab was created with goal demonstrating that the runner can orchestrate output and the domain classes should remain reusable.  
+- a specific json format and runner structure was followed for this exercise.  
+- instead of importing to showcase runner. a similar approach to the demo.py was taken in constructing polygons and point which is used for the goals of this exercise.  
+- the evaluation was done by implementing the intersection method in the SpatialObject class.  
+- the JSON was created to export all the data result for the constructed data relationships.  
+- the visualization was done using a function for preview of the points and polygons using matplotlib. 
+    >the parcel polygon was drawn using its exterior coordinates (parcel.geometry.xy)
+    >the points were labelled using scatter and annotations 
+    
