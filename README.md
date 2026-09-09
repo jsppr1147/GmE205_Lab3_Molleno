@@ -49,3 +49,11 @@ Part F: Creating a specific runner script, structured outputs, and simple visual
     >the parcel polygon was drawn using its exterior coordinates (parcel.geometry.xy)
     >the points were labelled using scatter and annotations 
     
+
+Part G: Testing and Debugging  
+- using the test_spatial.py, a series of tests were created to check if the spatial.py works and handles its functions properly.  
+- the pytest.py module was used for this exercise in debugging. Although there is a unittest available, I find it easier to used the pytest due to its syntax which is simple and direct to the test I want.  
+- The labex recommended to create 10 tests for this exercise and the spatial.py successfully passed all of it while avoiding the broad suppresion.  
+- a pytest.ini was created so that the pytest can also import from the src folder.  
+- the outputs regenerate cleanly after using terminal: pip install -r requirements.txt  
+- Focused tests PASSED  [TO RUN in terminal. pytest tests\test_spatial.py -v]

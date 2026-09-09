@@ -131,8 +131,9 @@ class PointSet:
                     # Delegate validation and object creation directly to Point.from_row
                     point = Point.from_row(row)
                     points.append(point)
-                except (ValueError, KeyError, TypeError):
+                except (ValueError, KeyError, TypeError) as exc:
                     # Gracefully skip rows with invalid data/coordinates or missing keys
+                    print(f"Skipping invalid row {row}: {exc}")
                     continue
         return cls(points)
 
