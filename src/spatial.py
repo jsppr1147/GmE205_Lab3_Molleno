@@ -115,6 +115,7 @@ class Point(SpatialObject):
         return (self.tag or "").lower() == "poi"
 
 class PointSet:
+
     def __init__(self, points=None):
         #Store the points in a list. If no points are provided, initialize an empty list.
         self.points = list(points) if points is not None else []
@@ -160,3 +161,24 @@ class PointSet:
         
         filtered_points = [point for point in self.points if (point.tag or "").lower() == tag.lower()]
         return PointSet(filtered_points)
+
+class Parcel(SpatialObject):
+    def __init__(self, parcel_id, geometry, attributes: dict):
+        ''' 
+        Represents a land parcel with a unique identifier, geometry, and additional attributes.
+        Note: This uses a dictionary for parcel attributes 
+        '''
+        super().__init__(geometry)
+        self.parcel_id = parcel_id
+        self.attributes = attributes
+
+    def as_dict(self) -> dict:
+        '''
+        Describes the parcel using the primitives, this is useful for serialization (e.g., to JSON).
+        Doesnt return the geometry as a shapely object, but rather as a list of coordinates (lon, lat) for each vertex.        
+        '''
+        return {
+            "parcel_id": self.parcel_id,
+            "bbox": list(self.bbox()),
+            "attributes": self.attributes,
+        }

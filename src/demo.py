@@ -1,4 +1,8 @@
-from spatial import Point, PointSet
+from spatial import Point, PointSet, Parcel
+from shapely.geometry import Polygon
+
+
+
 
 # --- Point checks ---
 p = Point("0", 121.0, 14.0)
@@ -13,12 +17,18 @@ coordinate_distance = p.geometry.distance(q.geometry)
 
 #Part C Point checks
 #for valid record..
-valid_record = {"id": "A", "lon": 121.0, "lat": 14.6, "name": "Gate", "tag": "POI"}
+valid_record = {"id": "A",
+                "lon": 121.0, 
+                "lat": 14.6, 
+                "name": "Gate", 
+                "tag": "POI"
+                }
 p = Point.from_dict(valid_record)
 #print(p.as_dict())
 
 # testing for invalid record 
-'''invalid_record = {"id": "B", "lon": 999, "lat": 14.6}
+'''
+invalid_record = {"id": "B", "lon": 999, "lat": 14.6}
 
 try:
     bad = Point.from_dict(invalid_record)
@@ -26,8 +36,8 @@ except ValueError as exc:
     print(f"Invalid record correctly rejected: {exc}")'''
 
 #verify the inherited behavior from SpatialObject
-j = Point("2", 121.1, 14.1)
-print (j.bbox())
+#j = Point("2", 121.1, 14.1)
+#print (j.bbox())
 
 # --- PointSet checks ---
 CSV_PATH = "data/points.csv"  # relative path
@@ -40,3 +50,24 @@ bbox = ps.bbox()
 
 poi_set = ps.filter_by_tag("poi")
 #print(f"POI count: {poi_set.count()}")
+
+# ---Parcel checks---
+attributes = {"area": 50.0,
+              "zone": "Residential",
+              "is_active": True
+              }
+geom = Polygon([(0, 0), 
+                (10, 0), 
+                (10, 5), 
+                (0, 5)])
+
+
+parcel = Parcel(101, geom, attributes)
+print(parcel.bbox())
+print(parcel.as_dict())
+
+inside = Point("IN", 2, 2)
+outside = Point("OUT", 12, 2)
+
+print(inside.intersects(parcel))   #True
+print(outside.intersects(parcel))  #False

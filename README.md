@@ -31,3 +31,11 @@ Part D: Creating a shared spatial abstraction: SpatialObject
 - Point uses the super().__init__(geometry) to call the initialization of the SpatialObject on the geometry (lat,lon) attribute.  
 - demo.py now have lines to checking whether bbox() work without duplicating it on Point class.  
 
+Part E: Creating another Spatial Type (Class Parcel)  
+- A starter class was created which inherits the SpatialObject class and uses a dictionary from structured parcel attributes (JSON).  
+- Similar to Part C, the as_dict method is implemented to return the parcel_id, bbox() and attributes in primitive format / JSON-ready values. It doesnt return the shapely object.  
+- the demo.py is updated to check for functionality of the Parcel class.  
+- the import section was updated. the polygon from shapely was imported.  
+- An arbitrary polygon is added to check if Parcel class is working fine.  
+- Additional points were also added to check whether in the method implementation is inherited properly from the SpatialObject. This is a good practice so the responsibility is distributed and placed properly to also avoid duplication of implementation is different classes.  
+
