@@ -1,0 +1,50 @@
+{
+  "p1": {
+    "id": "ME",
+    "name": null,
+    "tag": null,
+    "geometry": [
+      2.0,
+      2.0
+    ],
+    "bbox": [
+      2.0,
+      2.0,
+      2.0,
+      2.0
+    ]
+  },
+  "p2": {
+    "id": "YOU",
+    "name": null,
+    "tag": null,
+    "geometry": [
+      12.0,
+      2.0
+    ],
+    "bbox": [
+      12.0,
+      2.0,
+      12.0,
+      2.0
+    ]
+  },
+  "parcel": {
+    "parcel_id": 101,
+    "bbox": [
+      0.0,
+      0.0,
+      10.0,
+      10.0
+    ],
+    "attributes": {
+      "area": 42.8,
+      "zone": "Residential",
+      "is_active": true
+    }
+  },
+  "relationships": {
+    "p1_intersects_parcel": true,
+    "p2_intersects_parcel": false
+  }
+}
