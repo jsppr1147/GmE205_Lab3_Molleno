@@ -56,4 +56,32 @@ Part G: Testing and Debugging
 - The labex recommended to create 10 tests for this exercise and the spatial.py successfully passed all of it while avoiding the broad suppresion.  
 - a pytest.ini was created so that the pytest can also import from the src folder.  
 - the outputs regenerate cleanly after using terminal: pip install -r requirements.txt  
-- Focused tests PASSED  [TO RUN in terminal. pytest tests\test_spatial.py -v]
+- Focused tests PASSED  [TO RUN in terminal. pytest tests\test_spatial.py -v]  
+
+
+PART H: CHALLENGES (All challenges were successfully handled)
+1. Point.from_dict(d) -- this parses the id, lon, lat, & name/tag (optional) and delegates all validation to the Point class without duplicate checking.  
+2. Point.as_dict() and Parcel.as_dict() -- both returns only the primitives (strings, floats, list, dicts) with no live shapely objects. NOTE: there is also a test for this on the test_spatial.py (the test_point_as_dict_contains_no_live_shapely_objects)  
+3. The relationship 'Intersects' lives only on the SpatialObject class. Both the Point and Parcel class inherit it without re-defining it in their respective classes (also in test_spatial.py). I think these are the test to check if two SpatialObject intersect or not.  
+4. EXPLANATION ON THE DISTANCE DECISION. 
+Shapely's distance() was not used to replace the Lab 2 Haversine method because Shapely treats every geometry as existing on a flat Cartesian plane. It has no awareness that longitude and latitude represent positions on a curved Earth surface, so the number it returns is a raw coordinate-unit difference, not a real-world distance.
+
+In this project, Shapely is responsible for pure geometric shape math: computing bounding boxes and testing intersection(topology) between geometries. These operations are correct regardless of what the coordinates represent, because they only ask geometric questions ("does this shape overlap that shape?"), not questions about real-world meaning.
+
+Coordinate meaning — specifically, that lon/lat values represent locations on Earth's curved surface remains the responsibility of the Point class and its Haversine implementation. Unlike Shapely, Haversine explicitly accounts for Earth's radius and curvature, converting angular coordinate differences into an actual physical distance in meters.  
+
+[REFLECTIONS ANSWERS]
+
+1. REFACTORING: The representation of Points changed from plain floats (self.lat/self.lon) to a Shapely object (self.geometry). Because of the @property wrappers, existing methods and instances continued to work identically to the previous lab exercise. This stability is visible in that no other method in Point, nor any code in run_lab2.py or run_lab3.py, needed to change even after the internal representation changed.
+
+2. RESPONSIBILITY: SpatialObject owns geometry storage plus bbox() and intersects(). Point owns coordinate validation, id/name/tag, and Haversine distance. Parcel owns parcel_id and its attributes. intersects() lives only in SpatialObject and is inherited by both Point and Parcel, so there is no need to duplicate the method in either subclass. They both rely on SpatialObject handling the geometry comparison generically.
+
+3. DATA BOUNDARY: from_dict() delegates to the constructor instead of re-validating because having two places enforce the same validation rule risks them drifting out of sync if one is updated and the other isn't. It's best to have a single source of truth.
+
+4. OUTPUT BOUNDARY: as_dict() returns only primitives because JSON cannot serialize a live Shapely object. It also means a reader of the JSON report doesn't need Shapely installed just to read the output.
+
+5. INHERITANCE: intersects() lives in SpatialObject so that a future fix or behavior change only has to happen in one place. If it were duplicated separately inside Point and Parcel, the two copies could drift apart over time as one gets updated and the other doesn't. The same single-source-of-truth reasoning as #3.
+
+6. COORDINATE MEANING: Similar to the explanation in Challenge 4, Shapely only computes the geometric aspect of objects. It doesn't account for the reference system or Earth's actual size, so its output has no real-world meaning on its own.
+
+7. SCALE: Inheriting from SpatialObject gives every subclass bbox() and intersects() for free, which helps code organization and correctness as the model grows to new geometry types. However, it doesn't address performance at scale. Loading millions of points with a plain Python for-loop over a CSV is single-threaded and memory-bound, and checking intersects() against every object one-by-one doesn't scale either. Solving that would need different techniques entirely such as spatial indexing to avoid brute-force comparisons, or moving from an in-memory PointSet to a proper spatial database.
